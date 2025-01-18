@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Лабиринт</title>
+    <link rel="stylesheet" href="../assets/styles/css.css">
 </head>
 <body>
 	<!-- подготавливаем пустой холст, чтобы работать с ним из скрипта -->
@@ -17,6 +18,15 @@
 		<div class="before"></div>
 		<div class="after"></div>
 	</div>
+
+    <div id="controls">
+        <button id="up">↑</button>
+        <button id="left">←</button>
+        <button id="right">→</button>
+        <button id="down">↓</button>
+    </div>
+    <canvas></canvas>   
+
     <script>
 		generateMaze(15,15);
 	</script>

@@ -5,7 +5,7 @@ const rowsSize = 35;
 // размер клетки в лабиринте
 const fieldSize = 7;
  // рамка (внешняя граница лабиринта)
-const padding = 10;
+const padding = 20;
 
 // стартовые координаты игрока
 var player = {};
@@ -121,45 +121,104 @@ function drawPlayer() {
 	context.fill();
 }
 
+function movePlayer(player, direction, columnsSize, rowsSize) {
+    // Определение новых координат в зависимости от направления
+    let newX = player.X;
+    let newY = player.Y;
+
+    switch (direction) {
+        case 'right':
+            newX += 1;
+            break;
+        case 'left':
+            newX -= 1;
+            break;
+        case 'down':
+            newY += 1;
+            break;
+        case 'up':
+            newY -= 1;
+            break;
+        default:
+            console.error('Unknown direction');
+            return;
+    }
+
+    // Проверка, что новое положение не выходит за границы и клетка не занята
+    if (
+        newX >= 0 && newX < columnsSize && 
+        newY >= 0 && newY < rowsSize && 
+        getField(newX, newY) !== '▉'
+    ) {
+        // Обновляем позицию игрока
+        player.X = newX;
+        player.Y = newY;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Кнопка "вверх"
+    const upButton = document.getElementById('up');
+    if (upButton) {
+        upButton.addEventListener('click', function() {
+            movePlayer(player, 'up', columnsSize, rowsSize);    // Двигаем игрока вверх
+        });
+    } else {
+        console.error('Кнопка с ID "up" не найдена');
+    }
+
+    // Кнопка "вниз"
+    const downButton = document.getElementById('down');
+    if (downButton) {
+        downButton.addEventListener('click', function() {
+            movePlayer(player, 'down', columnsSize, rowsSize);  // Двигаем игрока вниз
+        });
+    } else {
+        console.error('Кнопка с ID "down" не найдена');
+    }
+
+    // Кнопка "влево"
+    const leftButton = document.getElementById('left');
+    if (leftButton) {
+        leftButton.addEventListener('click', function() {
+            movePlayer(player, 'left', columnsSize, rowsSize);  // Двигаем игрока влево
+        });
+    } else {
+        console.error('Кнопка с ID "left" не найдена');
+    }
+
+    // Кнопка "вправо"
+    const rightButton = document.getElementById('right');
+    if (rightButton) {
+        rightButton.addEventListener('click', function() {
+            // проверяем, не упираемся ли в стену или в границу лабиринта
+            movePlayer(player, 'right', columnsSize, rowsSize); // Двигаем игрока вправо
+        });
+    } else {
+        console.error('Кнопка с ID "right" не найдена');
+    }
+});
+
 // Отслеживаем нажатия клавиш
 document.addEventListener('keydown', function(e) {
 
 	// стрелка вверх,
 	if (e.which === 38) {
-		// если мы не упираемся в стену или в границу лабиринта при этом ходе, 
-		if ( ((player.Y - 1) >=0) && (getField(player.X, player.Y - 1) != '▉') ) {
-			// то двигаем игрока вверх
-			player.Y -= 1;
-		}
-
+        movePlayer(player, 'up', columnsSize, rowsSize);    // Двигаем игрока вверх
 	};
 
 	// стрелка вниз
 	if (e.which === 40) {
-		// если мы не упираемся в стену или в границу лабиринта при этом ходе, 
-	  if ( ((player.Y + 1) <= rowsSize - 1) && (getField(player.X, player.Y + 1) != '▉') ) {
-			// то двигаем игрока вниз
-			player.Y += 1;
-
-		}
+        movePlayer(player, 'down', columnsSize, rowsSize);  // Двигаем игрока вниз
 	};
 
 	// стрелка влево
 	if (e.which === 37) {
-		// если мы не упираемся в стену или в границу лабиринта при этом ходе, 
-	  if ( ((player.X - 1) >=0) && (getField(player.X - 1, player.Y) != '▉') ) {
-			// то двигаем игрока влево
-			player.X -= 1;
-		}
+        movePlayer(player, 'left', columnsSize, rowsSize);  // Двигаем игрока влево
 	};
 	// стрелка вправо
 	if (e.which === 39) {
-		// если мы не упираемся в стену или в границу лабиринта при этом ходе, 
-	  if ( ((player.X + 1) <= columnsSize - 1) && (getField(player.X + 1, player.Y) != '▉') ) {
-			// то двигаем игрока вправо
-			player.X += 1;
-
-		}
+        movePlayer(player, 'right', columnsSize, rowsSize); // Двигаем игрока вправо
 	};
 });
 
